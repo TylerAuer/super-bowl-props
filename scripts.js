@@ -1,14 +1,26 @@
-// API Request in Batches
-// https://sheets.googleapis.com/v4/spreadsheets/1bn9txDh7oo2UaWmM65i2SZuqyYhuG4hlXn-B76Ov4V0/values:batchGet?ranges=Standings!A1%3AA5&ranges=Standings!B1%3AB5&ranges=Standings!C1%3AC5&valueRenderOption=FORMATTED_VALUE&key=[YOUR_API_KEY]
+// arrays of cells to access in google sheet
+const APIRanges = { // in A1 notation
+  personalInfo: "Standings!3:500",
+  propsList: "Standings!1:1",
+  propResults: "Standings!2:2",
+};
 
-const APIrange = "Standings!3:500"; // in A1 notation
+// reduces ranges to single string and formats for API URL
+const ranges = Object.values(APIRanges).map(range => {
+  return "ranges=" + range + "&"
+}).reduce((accumulator, nextVal) => {
+  return accumulator + nextVal
+})
+
+// combines elements of API URL together
 const APIURL =
   "https://sheets.googleapis.com/v4/spreadsheets/" +
   spreadsheetID +
-  "/values/" +
-  APIrange +
-  "?key=" +
+  "/values:batchGet?" +
+  ranges +
+  "valueRenderOption=FORMATTED_VALUE&key=" +
   APIKey;
+
 
 function Participant(name, handle, points) {
   this.name = name;
