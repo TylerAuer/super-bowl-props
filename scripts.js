@@ -1,8 +1,8 @@
 // arrays of cells to access in google sheet
 const APIRanges = { // in A1 notation
-  // propsList: "Standings!1:1",
-  // propResults: "Standings!2:2",
-  personalInfo: "Standings!A3:G500",
+  personalInfo: "Rulings!A4:BE500",
+  propsList: "Rulings!D1:BE1",
+  propsResults: "Rulings!D2:BE2",
 };
 
 // reduces ranges to single string and formats for API URL
@@ -21,41 +21,46 @@ const APIURL =
   "valueRenderOption=FORMATTED_VALUE&key=" +
   APIKey;
 
-// TODO: function that determines the number of points someone has
-function Participant(rank, name, handle, points, percentCorrect) {
-  this.rank = rank;
+// TODO: add method to calculate points
+// TODO: add method to determine percent correct
+// TODO: add method to determine max score
+function Participant(name, handle, picksArray) {
   this.name = name;
   this.handle = handle;
-  this.points = points;
-  this.percentCorrect = percentCorrect;
+  this.picksArray = picksArray;
+  // this.points = points;
+  // this.percentCorrect = percentCorrect;
+  // this.rank = rank;
+  // TODO: Move this method to function outside of Participant object
+  // this.HTMLTableRow = () => {
 
-  this.HTMLTableRow = () => {
+  //   const tableRow = document.createElement('tr');
 
-    const tableRow = document.createElement('tr');
+  //   const rowHeader = document.createElement('th');
+  //   rowHeader.setAttribute('scope', 'row');
+  //   rowHeader.innerHTML = this.rank;
+  //   tableRow.appendChild(rowHeader);
 
-    const rowHeader = document.createElement('th');
-    rowHeader.setAttribute('scope', 'row');
-    rowHeader.innerHTML = this.rank;
-    tableRow.appendChild(rowHeader);
+  //   const dataToAdd = [this.name, this.handle, this.points, this.percentCorrect];
 
-    const dataToAdd = [this.name, this.handle, this.points, this.percentCorrect];
-
-    for (let data of dataToAdd) {
-      const cell = document.createElement('td');
-      if (data === this.percentCorrect) {
-        cell.classList.add("d-none");
-        cell.classList.add("d-sm-table-cell");
-      }
-      cell.innerHTML = data;
+  //   for (let data of dataToAdd) {
+  //     const cell = document.createElement('td');
+  //     if (data === this.percentCorrect) {
+  //       cell.classList.add("d-none");
+  //       cell.classList.add("d-sm-table-cell");
+  //     }
+  //     cell.innerHTML = data;
 
 
-      tableRow.appendChild(cell);
-    };
+  //     tableRow.appendChild(cell);
+  //   };
 
-    return tableRow;
+  //   return tableRow;
 
-  };
+  // };
 }
+
+let participantList = []
 
 var xhttp = new XMLHttpRequest();
 xhttp.onreadystatechange = function () {
@@ -63,13 +68,13 @@ xhttp.onreadystatechange = function () {
 
     data = JSON.parse(xhttp.responseText);
 
+    // processes the rows for each participant
     data.valueRanges.forEach(rangeGroup => {
-
-      // rank, name, handle, points, % correct table
       if (rangeGroup.range === APIRanges.personalInfo) {
-        rangeGroup.values.forEach((data) => {
-          const p = new Participant(data[0], data[1], data[2], data[3], data[5]);
-          document.getElementById('participant-data').appendChild(p.HTMLTableRow())
+        rangeGroup.values.forEach((data, index) => {
+          const p = new Participant(data[0], data[1], data.slice(3, 57));
+          participantList.push(p);
+          //document.getElementById('participant-data').appendChild(p.HTMLTableRow())
         });
       }
     });
@@ -79,3 +84,5 @@ xhttp.onreadystatechange = function () {
 
 xhttp.open("GET", APIURL, true);
 xhttp.send();
+
+console.log(participantList);
