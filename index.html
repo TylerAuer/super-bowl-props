@@ -14,8 +14,55 @@
 </head>
 
 <body>
-    <h1>Standings</h1>
-    <div id="dump-here"></div>
+    <div class="container">
+
+        <h1 class="display-1 text-center">SB LIV Props</h1>
+
+        <p>
+            The Super Bowl is the biggest sporting event of the year in the US, and the sports books offer an
+            outrageous number of wagers you can make. They include important things like who will win and
+            less important things like what will be the first letter in the name of the MVP of The Puppy Bowl. Each one
+            is called a "prop".
+        </p>
+        <p>
+            Since these details are of crucial importance, I organize a contest every year to see who can correctly
+            predict the most of them. I weight each outcome based on its likelyhood -- according to the odds from the
+            sportsbook.
+        </p>
+        <p>
+            Prizes are not necessary for a contest of this magnitude.
+        </p>
+
+        <table class="table table-hover table-borderless">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Rank</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Handle</th>
+                    <th scope="col">Score</th>
+                    <th scope="col" class="d-none d-sm-table-cell">% Correct</th>
+                </tr>
+            </thead>
+            <tbody id="participant-data">
+                <!-- Sample data -->
+                <!-- <tr>
+                    <th scope="row">1</th>
+                    <td>Tyler Auer</td>
+                    <td>3829</td>
+                    <td>34.2%</td>
+                    <td>50000</td>
+                </tr>
+                <tr>
+                    <td scope="row" colspan="5">
+                        <ul>
+                            <li>Red Gatorade</li>
+                            <li>Over 2:04</li>
+                        </ul>
+                    </td>
+                </tr> -->
+            </tbody>
+        </table>
+    </div>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
