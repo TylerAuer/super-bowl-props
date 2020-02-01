@@ -74,6 +74,7 @@ function processJSONData(data) {
 }
 
 function Participant(name, handle, picksArray) {
+  this.id = name.replace(/[^0-9a-z]/gi, ""); // removes all non-alphanumeric characters
   this.name = name;
   this.handle = handle;
   this.picksArray = picksArray;
