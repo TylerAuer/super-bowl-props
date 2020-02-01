@@ -5,6 +5,7 @@ const APIRanges = { // in A1 notation
   propsResults: "Rulings!D2:BE2",
 };
 
+// QUESTION: is this the best way to do this?
 // reduces ranges to single string and formats for API URL
 const ranges = Object.values(APIRanges).map(range => {
   return "ranges=" + range + "&"
@@ -60,7 +61,9 @@ function Participant(name, handle, picksArray) {
   // };
 }
 
-let participantList = []
+let participantList = [];
+let propsList = [];
+let propsResults = [];
 
 var xhttp = new XMLHttpRequest();
 xhttp.onreadystatechange = function () {
@@ -76,9 +79,20 @@ xhttp.onreadystatechange = function () {
           participantList.push(p);
           //document.getElementById('participant-data').appendChild(p.HTMLTableRow())
         });
+
+        // collects all of the prop titles
+      } else if (rangeGroup.range === APIRanges.propsList) {
+        rangeGroup.values.forEach(data => {
+          propsList.push(data);
+        });
+
+        // collects all of the prop results
+      } else if (rangeGroup.range === APIRanges.propsResults) {
+        rangeGroup.values.forEach(data => {
+          propsResults.push(data);
+        });
       }
     });
-
   }
 };
 
@@ -86,3 +100,5 @@ xhttp.open("GET", APIURL, true);
 xhttp.send();
 
 console.log(participantList);
+console.log(propsList);
+console.log(propsResults);
