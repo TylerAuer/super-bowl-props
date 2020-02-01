@@ -61,7 +61,7 @@ function processJSONData(data) {
   // adds rank property to each participant
   participantList.forEach((participant, index) => {
     // 1 + index adjust for 0 indexing of arrays in JS
-    participant.rank = 1 + index;
+    participant.stats.rank = 1 + index;
     console.log(participant);
   });
 }
