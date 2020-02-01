@@ -58,11 +58,18 @@ function processJSONData(data) {
     return b.stats.points - a.stats.points;
   });
 
-  // adds rank property to each participant
+  // generates participant table after determining rank
   participantList.forEach((participant, index) => {
-    // 1 + index adjust for 0 indexing of arrays in JS
-    participant.stats.rank = 1 + index;
-    console.log(participant);
+    // assigns rank
+    participant.stats.rank = 1 + index; // makes first place 1 not 0
+
+    const participantTable = document.getElementById("participant-data");
+
+    // adds main row of data
+    participantTable.appendChild(makeTrMain(participant));
+
+    // adds hidden details row
+    participantTable.appendChild(makeTrDetails(participant));
   });
 }
 
@@ -73,7 +80,7 @@ function Participant(name, handle, picksArray) {
   this.stats = calculateStats(this.picksArray);
 }
 
-// Given an array of a Participants picks, calculates points for correct picks
+// Determines values of stats for participants (rank is added later after sorting)
 function calculateStats(picksArray) {
   let points = 0;
   let numCorrect = 0;
@@ -98,33 +105,65 @@ function calculateStats(picksArray) {
     numWrong: numWrong,
     percentCorrect: Math.round((1000 * numCorrect) / picksArray.length) / 10,
     pointsPerCorrect: Math.round((10 * points) / numCorrect) / 10,
-    maxPossibleScore: points + maxScoreAddOn
+    maxScore: points + maxScoreAddOn
   };
   return stats;
 }
 
 // TODO: finish generateTableHTML function
-// function generateTableHTML(participantObject) {
-//   const tableRowMain = document.createElement("tr");
-//   //const tableRowExpanded = document.createElement("tr");
+function makeTrMain(participant) {
+  const tableRowMain = document.createElement("tr");
 
-//   const rowHeader = document.createElement("th");
-//   rowHeader.setAttribute("scope", "row");
-//   rowHeader.innerHTML = .rank;
-//   tableRowMain.appendChild(rowHeader);
+  const rowHeader = document.createElement("th");
+  rowHeader.setAttribute("scope", "row");
+  rowHeader.innerHTML = participant.stats.rank;
+  tableRowMain.appendChild(rowHeader);
 
-//   const dataToAdd = [this.name, this.handle, this.points, this.percentCorrect];
+  const dataToAdd = [
+    participant.name,
+    participant.handle,
+    participant.stats.points,
+    participant.stats.percentCorrect
+  ];
 
-//   for (let data of dataToAdd) {
-//     const cell = document.createElement("td");
-//     if (data === this.percentCorrect) {
-//       cell.classList.add("d-none");
-//       cell.classList.add("d-sm-table-cell");
-//     }
-//     cell.innerHTML = data;
+  for (data of dataToAdd) {
+    const cell = document.createElement("td");
+    if (data === participant.stats.percentCorrect) {
+      cell.classList.add("d-none");
+      cell.classList.add("d-sm-table-cell");
+    }
+    cell.innerHTML = data;
 
-//     tableRowMain.appendChild(cell);
-//   }
+    tableRowMain.appendChild(cell);
+  }
 
-//   return tableRowMain;
-// }
+  return tableRowMain;
+}
+
+function makeTrDetails(participant) {
+  const tableRowDetails = document.createElement("tr");
+  tableRowDetails.classList.add("collapse");
+
+  const cell = document.createElement("td");
+  cell.setAttribute("colspan", "5");
+  tableRowDetails.appendChild(cell);
+  return tableRowDetails;
+}
+
+{
+  /* 
+<p>
+  <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+    Link with href
+  </a>
+  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+    Button with data-target
+  </button>
+</p>
+<div class="collapse" id="collapseExample">
+  <div class="card card-body">
+    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+  </div>
+</div> 
+*/
+}
