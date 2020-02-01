@@ -79,6 +79,8 @@ function Participant(name, handle, picksArray) {
   this.handle = handle;
   this.picksArray = picksArray;
   this.stats = calculateStats(this.picksArray);
+  // points, numCorrect, numCorrect, numWrong,
+  // percentCorrect, pointsPerCorrect, maxScore
 }
 
 // Determines values of stats for participants (rank is added later after sorting)
@@ -114,10 +116,19 @@ function calculateStats(picksArray) {
 // TODO: finish generateTableHTML function
 function makeTrMain(participant) {
   const tableRowMain = document.createElement("tr");
+  tableRowMain.id = "main-" + participant.id;
+
+  statsBtn = document.createElement("button");
+  statsBtn.innerHTML = participant.stats.rank;
+  statsBtn.classList.add("btn");
+  statsBtn.classList.add("btn-secondary");
+  statsBtn.setAttribute("type", "button");
+  statsBtn.setAttribute("data-toggle", "collapse");
+  statsBtn.setAttribute("data-target", "#details-" + participant.id);
 
   const rowHeader = document.createElement("th");
   rowHeader.setAttribute("scope", "row");
-  rowHeader.innerHTML = participant.stats.rank;
+  rowHeader.appendChild(statsBtn);
   tableRowMain.appendChild(rowHeader);
 
   const dataToAdd = [
@@ -143,6 +154,7 @@ function makeTrMain(participant) {
 
 function makeTrDetails(participant) {
   const tableRowDetails = document.createElement("tr");
+  tableRowDetails.id = "details-" + participant.id;
   tableRowDetails.classList.add("collapse");
 
   const cell = document.createElement("td");
