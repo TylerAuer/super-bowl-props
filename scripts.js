@@ -140,6 +140,7 @@ function makeTrMain(participant) {
 
   for (data of dataToAdd) {
     const cell = document.createElement("td");
+    cell.classList.add("align-middle");
     if (data === participant.stats.percentCorrect) {
       cell.classList.add("d-none");
       cell.classList.add("d-sm-table-cell");
@@ -160,23 +161,6 @@ function makeTrDetails(participant) {
   const cell = document.createElement("td");
   cell.setAttribute("colspan", "5");
   tableRowDetails.appendChild(cell);
-  return tableRowDetails;
-}
 
-{
-  /* 
-<p>
-  <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-    Link with href
-  </a>
-  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-    Button with data-target
-  </button>
-</p>
-<div class="collapse" id="collapseExample">
-  <div class="card card-body">
-    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
-  </div>
-</div> 
-*/
+  return tableRowDetails;
 }
