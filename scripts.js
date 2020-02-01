@@ -37,27 +37,40 @@ xhttp.onreadystatechange = function() {
 xhttp.open("GET", APIURL, true);
 xhttp.send();
 
-let participantList = [];
+let participantList;
 let propsList;
 let propsResults;
 
 // process the ranges from APIRanges
 function processJSONData(data) {
-  // ranges indexes are determined by their order in the APIRanges object
-
   propsList = data.valueRanges[0].values[0];
   propsResults = data.valueRanges[1].values[0];
 
-  // Processes participants
+  // Clears list for reloading API Data
+  participantList = [];
   data.valueRanges[2].values.forEach((data, index) => {
     const p = new Participant(data[0], data[1], data.slice(3, 57));
     participantList.push(p);
-    //document.getElementById('participant-data').appendChild(p.HTMLTableRow())
   });
 
-  console.log("Participants", participantList);
-  // console.log("Props List", propsList);
-  // console.log("Prop results", propsResults);
+  // sorts participants from most to fewest points
+  participantList.sort((a, b) => {
+    return b.stats.points - a.stats.points;
+  });
+
+  // adds rank property to each participant
+  participantList.forEach((participant, index) => {
+    // 1 + index adjust for 0 indexing of arrays in JS
+    participant.rank = 1 + index;
+    console.log(participant);
+  });
+}
+
+function Participant(name, handle, picksArray) {
+  this.name = name;
+  this.handle = handle;
+  this.picksArray = picksArray;
+  this.stats = calculateStats(this.picksArray);
 }
 
 // Given an array of a Participants picks, calculates points for correct picks
@@ -90,35 +103,28 @@ function calculateStats(picksArray) {
   return stats;
 }
 
-function Participant(name, handle, picksArray) {
-  this.name = name;
-  this.handle = handle;
-  this.picksArray = picksArray;
-  this.stats = calculateStats(this.picksArray);
-  // TODO: Move this method to function outside of Participant object
-  // this.HTMLTableRow = () => {
+// TODO: finish generateTableHTML function
+// function generateTableHTML(participantObject) {
+//   const tableRowMain = document.createElement("tr");
+//   //const tableRowExpanded = document.createElement("tr");
 
-  //   const tableRow = document.createElement('tr');
+//   const rowHeader = document.createElement("th");
+//   rowHeader.setAttribute("scope", "row");
+//   rowHeader.innerHTML = .rank;
+//   tableRowMain.appendChild(rowHeader);
 
-  //   const rowHeader = document.createElement('th');
-  //   rowHeader.setAttribute('scope', 'row');
-  //   rowHeader.innerHTML = this.rank;
-  //   tableRow.appendChild(rowHeader);
+//   const dataToAdd = [this.name, this.handle, this.points, this.percentCorrect];
 
-  //   const dataToAdd = [this.name, this.handle, this.points, this.percentCorrect];
+//   for (let data of dataToAdd) {
+//     const cell = document.createElement("td");
+//     if (data === this.percentCorrect) {
+//       cell.classList.add("d-none");
+//       cell.classList.add("d-sm-table-cell");
+//     }
+//     cell.innerHTML = data;
 
-  //   for (let data of dataToAdd) {
-  //     const cell = document.createElement('td');
-  //     if (data === this.percentCorrect) {
-  //       cell.classList.add("d-none");
-  //       cell.classList.add("d-sm-table-cell");
-  //     }
-  //     cell.innerHTML = data;
+//     tableRowMain.appendChild(cell);
+//   }
 
-  //     tableRow.appendChild(cell);
-  //   };
-
-  //   return tableRow;
-
-  // };
-}
+//   return tableRowMain;
+// }
