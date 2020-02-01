@@ -79,8 +79,13 @@ function Participant(name, handle, picksArray) {
   this.handle = handle;
   this.picksArray = picksArray;
   this.stats = calculateStats(this.picksArray);
-  // points, numCorrect, numCorrect, numWrong,
-  // percentCorrect, pointsPerCorrect, maxScore
+  // points
+  // numCorrect
+  // numCorrect
+  // numWrong,
+  // percentCorrect
+  // pointsPerCorrect
+  // maxScore
 }
 
 // Determines values of stats for participants (rank is added later after sorting)
@@ -113,7 +118,6 @@ function calculateStats(picksArray) {
   return stats;
 }
 
-// TODO: finish generateTableHTML function
 function makeTrMain(participant) {
   const tableRowMain = document.createElement("tr");
   tableRowMain.id = "main-" + participant.id;
@@ -134,8 +138,7 @@ function makeTrMain(participant) {
   const dataToAdd = [
     participant.name,
     participant.handle,
-    participant.stats.points,
-    participant.stats.percentCorrect
+    participant.stats.points
   ];
 
   for (data of dataToAdd) {
@@ -153,14 +156,60 @@ function makeTrMain(participant) {
   return tableRowMain;
 }
 
+// makes the details for each participant
 function makeTrDetails(participant) {
-  const tableRowDetails = document.createElement("tr");
-  tableRowDetails.id = "details-" + participant.id;
-  tableRowDetails.classList.add("collapse");
+  // % correct and Pts / correct
+  const row1 = document.createElement("div");
+  row1.classList.add("row");
+  row1.innerHTML =
+    '<div class="col"><h5>Percent Correct</h5><div>' +
+    participant.stats.percentCorrect +
+    " %</div></div>" +
+    '<div class="col"><h5>Points per Correct</h5><div>' +
+    participant.stats.pointsPerCorrect +
+    " points</div></div>";
 
   const cell = document.createElement("td");
   cell.setAttribute("colspan", "5");
+  cell.appendChild(row1);
+
+  const tableRowDetails = document.createElement("tr");
+  tableRowDetails.id = "details-" + participant.id;
+  tableRowDetails.classList.add("collapse");
   tableRowDetails.appendChild(cell);
+
+  // <div container-fluid>
+
+  //// <div class="row text-center">
+  ////// <div class="col-sm">
+  //////// <h3>Percent Correct</h3>
+  //////// {% Correct}
+  ////// </div>
+  ////// <div class="col-sm">
+  //////// <h3>Points per Correct</h3>
+  //////// {Points / correct}
+  ////// </div>
+  //// </div>
+
+  //// <div class="row text-center">
+  ////// {Riskyness diagram}
+  //// </div>
+
+  ////// <div class="col-sm">
+  //////// <h3>Correct</h3>
+  //////// {Prop Name} - {Their Pick}
+  ////// </div>
+  ////// <div class="col-sm">
+  //////// <h3>Incorrect</h3>
+  //////// {Prop Name} - {Their Pick}
+  ////// </div>
+  ////// <div class="col-sm">
+  //////// <h3>Unresolved</h3>
+  //////// {Prop Name} - {Their Pick}
+  ////// </div>
+  //// </div>
+
+  // </div>
 
   return tableRowDetails;
 }
