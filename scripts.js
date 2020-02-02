@@ -3,7 +3,8 @@ const APIRanges = {
   // in A1 notation
   propsList: "Rulings!D1:BE1",
   propsResults: "Rulings!D2:BE2",
-  personalInfo: "Rulings!A4:BE500"
+  personalInfo: "Rulings!A4:BE500",
+  riskyness: "Riskiness!A3:B3"
 };
 
 // QUESTION: is this the best way to do this?
@@ -40,6 +41,7 @@ xhttp.send();
 let participantList;
 let propsList;
 let propsResults;
+let avgPointsPerProp;
 
 // process the ranges from APIRanges
 function processJSONData(data) {
@@ -98,8 +100,11 @@ function calculateStats(picksArray) {
   for (let i = 0; i < picksArray.length; i++) {
     if (picksArray[i] === propsResults[i]) {
       // regex needed because some results are worth different numbers of digits
+      // can't use slice because negative indexes aren't consistent
       points += parseInt(picksArray[i].match(/\((\d+)\s/)[1]);
       numCorrect += 1;
+    } else if (propsResults[i] === "push") {
+      // skips props that have no winner or push
     } else if (propsResults[i] !== "null") {
       numWrong += 1;
     } else {
@@ -111,7 +116,8 @@ function calculateStats(picksArray) {
     points: points,
     numCorrect: numCorrect,
     numWrong: numWrong,
-    percentCorrect: Math.round((1000 * numCorrect) / picksArray.length) / 10,
+    percentCorrect:
+      Math.round((1000 * numCorrect) / (numCorrect + numWrong)) / 10,
     pointsPerCorrect: Math.round((10 * points) / numCorrect) / 10,
     maxScore: points + maxScoreAddOn
   };
@@ -125,7 +131,7 @@ function makeTrMain(participant) {
   statsBtn = document.createElement("button");
   statsBtn.innerHTML = participant.stats.rank;
   statsBtn.classList.add("btn");
-  statsBtn.classList.add("btn-secondary");
+  statsBtn.classList.add("btn-outline-dark");
   statsBtn.setAttribute("type", "button");
   statsBtn.setAttribute("data-toggle", "collapse");
   statsBtn.setAttribute("data-target", "#details-" + participant.id);
@@ -161,6 +167,8 @@ function makeTrDetails(participant) {
   // % correct and Pts / correct
   const row1 = document.createElement("div");
   row1.classList.add("row");
+  row1.classList.add("row2");
+  row1.classList.add("text-center");
   row1.innerHTML =
     '<div class="col"><h5>Percent Correct</h5><div>' +
     participant.stats.percentCorrect +
@@ -169,10 +177,65 @@ function makeTrDetails(participant) {
     participant.stats.pointsPerCorrect +
     " points</div></div>";
 
+  // Riskyness diagram
+  const row2 = document.createElement("div");
+  row2.classList.add("row");
+  row2.classList.add("row2");
+
+  // Picks so far
+  const row3 = document.createElement("div");
+  row3.classList.add("row");
+  row3.classList.add("row3");
+
+  undecidedList = document.createElement("ul");
+  correctList = document.createElement("ul");
+  wrongList = document.createElement("ul");
+
+  for (let i = 0; i < propsResults.length; i++) {
+    // unresolved prop
+    if (propsResults[i] === "null") {
+      undecidedList.innerHTML +=
+        "<li><b>" +
+        propsList[i] +
+        "</b> - " +
+        participant.picksArray[i] +
+        "</li>";
+      // correct prop
+    } else if (propsResults[i] === participant.picksArray[i]) {
+      correctList.innerHTML +=
+        "<li><b>" +
+        propsList[i] +
+        "</b> - " +
+        participant.picksArray[i] +
+        "</li>";
+    } else if (propsResults[i] === "push") {
+      // pushed props are skipped
+    } else {
+      wrongList.innerHTML +=
+        "<li><b>" +
+        propsList[i] +
+        "</b> - " +
+        participant.picksArray[i] +
+        "</li>";
+    }
+  }
+  row3.innerHTML =
+    '<div class="col-md"><h5>Correct</h5>' +
+    correctList.outerHTML +
+    '</div><div class="col-md"><h5>Incorrect</h5>' +
+    wrongList.outerHTML +
+    '</div><div class="col-md"><h5>Unresolved</h5>' +
+    undecidedList.outerHTML +
+    "</div></div>";
+
+  // assembles parts
   const cell = document.createElement("td");
   cell.setAttribute("colspan", "5");
   cell.appendChild(row1);
+  cell.appendChild(row2);
+  cell.appendChild(row3);
 
+  // TODO: move collapse to a div within the tableRow
   const tableRowDetails = document.createElement("tr");
   tableRowDetails.id = "details-" + participant.id;
   tableRowDetails.classList.add("collapse");
