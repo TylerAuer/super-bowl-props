@@ -41,12 +41,17 @@ xhttp.send();
 let participantList;
 let propsList;
 let propsResults;
-let avgPointsPerProp;
+let groupPointsMean;
+let groupPointsStdDev;
 
 // process the ranges from APIRanges
 function processJSONData(data) {
   propsList = data.valueRanges[0].values[0];
   propsResults = data.valueRanges[1].values[0];
+  groupPointsMean = parseFloat(data.valueRanges[3].values[0][0]);
+  groupPointsStdDev = parseFloat(data.valueRanges[3].values[0][1]);
+
+  // TODO: Import median points / person and STD Dev
 
   // Clears list for reloading API Data
   participantList = [];
@@ -123,7 +128,9 @@ function calculateStats(picksArray) {
       Math.round((1000 * numCorrect) / (numCorrect + numWrong)) / 10,
     pointsPerCorrect: Math.round((10 * points) / numCorrect) / 10,
     maxScore: points + maxScoreAddOn,
-    averagePointsPerProp: totalPoints / picksArray.length
+    averagePointsPerProp: totalPoints / picksArray.length,
+    zScore:
+      (totalPoints / picksArray.length - groupPointsMean) / groupPointsStdDev
   };
   return stats;
 }
@@ -184,10 +191,19 @@ function makeTrDetails(participant) {
     participant.stats.maxScore +
     " points</div></div>";
 
+  //TODO: add diagram
+  // use z-score
   // Riskyness diagram
   const row2 = document.createElement("div");
   row2.classList.add("row");
   row2.classList.add("row2");
+  row2.innerHTML = (
+    <div class="risk-bar">
+      <div class="risk-bar-marker"></div>
+      <div class="risk-bar-safe"></div>
+      <div class="risk-bar-risky"></div>
+    </div>
+  );
 
   // Picks so far
   const row3 = document.createElement("div");
