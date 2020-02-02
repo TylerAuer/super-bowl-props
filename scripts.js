@@ -181,29 +181,28 @@ function makeTrDetails(participant) {
   row1.classList.add("row1");
   row1.classList.add("text-center");
   row1.innerHTML =
-    '<div class="col"><h5>Percent Correct</h5><div>' +
+    '<div class="col"><h4>Percent Correct</h4><div>' +
     participant.stats.percentCorrect +
     " %</div></div>" +
-    '<div class="col"><h5>Points per Correct</h5><div>' +
+    '<div class="col"><h4>Points per Correct</h4><div>' +
     participant.stats.pointsPerCorrect +
     " points</div></div>" +
-    '<div class="col"><h5>Max Score Possible</h5><div>' +
+    '<div class="col"><h4>Max Score Possible</h4><div>' +
     participant.stats.maxScore +
     " points</div></div>";
 
-  //TODO: add diagram
-  // use z-score
-  // Riskyness diagram
+  console.log(participant.name, participant.stats.zScore);
   const row2 = document.createElement("div");
   row2.classList.add("row");
   row2.classList.add("row2");
-  row2.innerHTML = (
-    <div class="risk-bar">
-      <div class="risk-bar-marker"></div>
-      <div class="risk-bar-safe"></div>
-      <div class="risk-bar-risky"></div>
-    </div>
-  );
+  const scaledScore = participant.stats.zScore * (45 / 4) + 50;
+  console.log(scaledScore);
+  row2.innerHTML =
+    '<div class="container-fluid"><div class="risk-bar"><div class="risk-bar-marker align-middle" ' +
+    'style="left: ' +
+    scaledScore +
+    '%; "' +
+    '></div><div class="risk-bar-safe text-left align-middle"><span class="bar-label">Safer Picks</span></div><div class="risk-bar-risky text-right align-middle"><span class="bar-label">Riskier Picks</span></div></div></div>';
 
   // Picks so far
   const row3 = document.createElement("div");
@@ -262,40 +261,8 @@ function makeTrDetails(participant) {
   const tableRowDetails = document.createElement("tr");
   tableRowDetails.id = "details-" + participant.id;
   tableRowDetails.classList.add("collapse");
+  tableRowDetails.classList.add("details");
   tableRowDetails.appendChild(cell);
-
-  // <div container-fluid>
-
-  //// <div class="row text-center">
-  ////// <div class="col-sm">
-  //////// <h3>Percent Correct</h3>
-  //////// {% Correct}
-  ////// </div>
-  ////// <div class="col-sm">
-  //////// <h3>Points per Correct</h3>
-  //////// {Points / correct}
-  ////// </div>
-  //// </div>
-
-  //// <div class="row text-center">
-  ////// {Riskyness diagram}
-  //// </div>
-
-  ////// <div class="col-sm">
-  //////// <h3>Correct</h3>
-  //////// {Prop Name} - {Their Pick}
-  ////// </div>
-  ////// <div class="col-sm">
-  //////// <h3>Incorrect</h3>
-  //////// {Prop Name} - {Their Pick}
-  ////// </div>
-  ////// <div class="col-sm">
-  //////// <h3>Unresolved</h3>
-  //////// {Prop Name} - {Their Pick}
-  ////// </div>
-  //// </div>
-
-  // </div>
 
   return tableRowDetails;
 }

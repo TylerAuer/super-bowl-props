@@ -1,0 +1,56 @@
+.details > td {
+  background-color: #ececec;
+  border: 2px solid black;
+  border-radius: 5px;
+  padding-top: 0px;
+  margin: 5px;
+}
+
+.row1,
+.row2,
+.row3 {
+  margin: 10px 5px;
+}
+
+.risk-bar {
+  height: 38px;
+  width: 80%;
+  border: 2px solid black;
+  margin: 10px auto;
+  border-radius: 10px;
+  position: relative;
+  font-size: 20px;
+}
+
+.risk-bar-marker {
+  background-color: rgba(0, 0, 0, 0.794);
+  border-radius: 15px;
+  margin: 2px auto;
+  height: 30px;
+  width: 30px;
+  position: absolute;
+  z-index: 10;
+}
+
+.risk-bar-safe {
+  background-color: rgba(0, 196, 0, 0.267);
+  height: 100%;
+  width: 50%;
+  float: left;
+  border-right: 2px solid darkgray;
+  z-index: 1;
+}
+
+.risk-bar-risky {
+  background-color: rgba(196, 0, 0, 0.267);
+  height: 100%;
+  width: 50%;
+  float: right;
+  z-index: 1;
+}
+
+.bar-label {
+  padding: 0px 5px;
+  margin: auto auto;
+  color: rgb(82, 82, 82);
+}
