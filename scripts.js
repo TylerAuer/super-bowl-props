@@ -96,19 +96,22 @@ function calculateStats(picksArray) {
   let numCorrect = 0;
   let numWrong = 0;
   let maxScoreAddOn = 0;
+  let totalPoints = 0;
 
   for (let i = 0; i < picksArray.length; i++) {
+    pointsAtIndex = parseInt(picksArray[i].match(/\((\d+)\s/)[1]);
+    totalPoints += pointsAtIndex;
     if (picksArray[i] === propsResults[i]) {
       // regex needed because some results are worth different numbers of digits
       // can't use slice because negative indexes aren't consistent
-      points += parseInt(picksArray[i].match(/\((\d+)\s/)[1]);
+      points += pointsAtIndex;
       numCorrect += 1;
     } else if (propsResults[i] === "push") {
       // skips props that have no winner or push
     } else if (propsResults[i] !== "null") {
       numWrong += 1;
     } else {
-      maxScoreAddOn += parseInt(picksArray[i].match(/\((\d+)\s/)[1]);
+      maxScoreAddOn += pointsAtIndex;
     }
   }
 
@@ -119,7 +122,8 @@ function calculateStats(picksArray) {
     percentCorrect:
       Math.round((1000 * numCorrect) / (numCorrect + numWrong)) / 10,
     pointsPerCorrect: Math.round((10 * points) / numCorrect) / 10,
-    maxScore: points + maxScoreAddOn
+    maxScore: points + maxScoreAddOn,
+    averagePointsPerProp: totalPoints / picksArray.length
   };
   return stats;
 }
@@ -167,7 +171,7 @@ function makeTrDetails(participant) {
   // % correct and Pts / correct
   const row1 = document.createElement("div");
   row1.classList.add("row");
-  row1.classList.add("row2");
+  row1.classList.add("row1");
   row1.classList.add("text-center");
   row1.innerHTML =
     '<div class="col"><h5>Percent Correct</h5><div>' +
@@ -175,6 +179,9 @@ function makeTrDetails(participant) {
     " %</div></div>" +
     '<div class="col"><h5>Points per Correct</h5><div>' +
     participant.stats.pointsPerCorrect +
+    " points</div></div>" +
+    '<div class="col"><h5>Max Score Possible</h5><div>' +
+    participant.stats.maxScore +
     " points</div></div>";
 
   // Riskyness diagram
