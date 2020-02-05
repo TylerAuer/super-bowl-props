@@ -7,7 +7,6 @@ const APIRanges = {
   riskyness: "Riskiness!A3:B3"
 };
 
-// QUESTION: is this the best way to do this?
 // reduces ranges to single string and formats for API URL
 const ranges = Object.values(APIRanges)
   .map(range => {
