@@ -2,6 +2,8 @@
 
 I threw this site together across a couple of evenings the week of Super Bowl LIV (SF VS KC). It displays results for a game I run during the Super Bowl each year. There's a lot that can be improved (see below), but it got the job done.
 
+> [See it live!](http://liv.mathfireworks.com/)
+
 ## About the Game
 
 For the last five years, I've run a free fun game during the Super Bowl. I go through the silly and serious betting options (called "props") for the game, and give others a chance to try to pick the correct result.
