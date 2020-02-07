@@ -38,4 +38,4 @@ Since each result of a prop bet has varying probabilities of occurring, I use th
 
 - Reorganize locations of methods to be more logical and closer to where they are used
 - Make the HTML element creation easier to read by using String [Template Literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals)
-- Not try to build this in just a few night, so I can better plan, structure, and comment my code
+- Not try to build this in just a few nights, so I can better plan, structure, and comment my code
